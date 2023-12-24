@@ -21,7 +21,7 @@ func CreateToken() do.TokenDO {
 	}
 	_, err := g.Model("xf_token").Data(token).OmitEmpty().Insert()
 	if err == nil {
-		g.Log().Cat("Database").Cat("Token").Debug(context.TODO(), "Token", token.Token, "创建成功")
+		g.Log().Cat("Database").Cat("Token").Notice(context.TODO(), "Token", token.Token, "创建成功")
 		return token
 	} else {
 		g.Log().Cat("Database").Cat("Token").Error(context.TODO(), err.Error())
@@ -43,11 +43,11 @@ func GetToken(token string) *do.TokenDO {
 				g.Log().Cat("Database").Cat("Token").Error(context.TODO(), err.Error())
 				return nil
 			} else {
-				g.Log().Cat("Database").Cat("Token").Debug(context.TODO(), "Token", tokenDO.Token, "获取成功")
+				g.Log().Cat("Database").Cat("Token").Notice(context.TODO(), "Token", tokenDO.Token, "获取成功")
 				return &tokenDO
 			}
 		} else {
-			g.Log().Cat("Database").Cat("Token").Debug(context.TODO(), "xf_token 数据表为空")
+			g.Log().Cat("Database").Cat("Token").Notice(context.TODO(), "xf_token 数据表为空")
 			return nil
 		}
 	} else {
@@ -64,6 +64,6 @@ func DeleteToken(token string) {
 	if err != nil {
 		g.Log().Cat("Database").Cat("Token").Error(context.TODO(), err.Error())
 	} else {
-		g.Log().Cat("Database").Cat("Token").Debug(context.TODO(), "Token", token, "删除成功")
+		g.Log().Cat("Database").Cat("Token").Notice(context.TODO(), "Token", token, "删除成功")
 	}
 }

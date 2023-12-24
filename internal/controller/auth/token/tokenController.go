@@ -52,11 +52,8 @@ func (_ *ControllerV1) TokenVerify(ctx context.Context, _ *request.TokenVerifyRe
 		// 检查 Session 是否有效
 		token = tokenService.GetToken(req)
 		if tokenService.VerifyToken(token) {
-			// 有效则输出Token依然有效
 			ResultUtil.SuccessNoData(req, "Token 有效")
 		} else {
-			// 生成新的 Session
-			token = tokenService.CreateToken()
 			ResultUtil.ErrorNoData(req, ErrorCode.TokenVerifyFailed)
 		}
 	} else {
