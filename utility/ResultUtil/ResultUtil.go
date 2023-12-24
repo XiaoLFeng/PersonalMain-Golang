@@ -1,4 +1,4 @@
-package utility
+package ResultUtil
 
 import (
 	"PersonalMain/utility/ErrorCode"
@@ -31,6 +31,9 @@ func SuccessNoData(req *ghttp.Request, message string) {
 	})
 }
 
+// Error
+//
+// 错误输出（包含 data）
 func Error(req *ghttp.Request, errorCode ErrorCode.ErrorCode, data interface{}) {
 	req.Response.WriteJson(g.Map{
 		"output":  errorCode.Output(),
@@ -40,6 +43,20 @@ func Error(req *ghttp.Request, errorCode ErrorCode.ErrorCode, data interface{}) 
 	})
 }
 
+// ErrorNoData
+//
+// 错误输出（不含 data）
+func ErrorNoData(req *ghttp.Request, errorCode ErrorCode.ErrorCode) {
+	req.Response.WriteJson(g.Map{
+		"output":  errorCode.Output(),
+		"code":    errorCode.Code(),
+		"message": errorCode.Message(),
+	})
+}
+
+// ErrorDefault
+//
+// 默认错误输出（包含 data）
 func ErrorDefault(req *ghttp.Request, output string, code int, message string, data interface{}) {
 	req.Response.WriteJson(g.Map{
 		"output":  output,

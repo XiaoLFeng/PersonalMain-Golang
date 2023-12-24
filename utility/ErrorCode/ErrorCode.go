@@ -13,7 +13,8 @@ type Errors interface {
 }
 
 var (
-	NoneDataResult = ErrorCode{output: "success", code: 200, message: "success"}
+	TokenExpired      = ErrorCode{output: "error", code: 40100, message: "Token 已过期"}
+	TokenVerifyFailed = ErrorCode{output: "error", code: 40101, message: "Token 验证失败"}
 )
 
 func (e ErrorCode) Output() string {
