@@ -1,8 +1,9 @@
 package middleware
 
 import (
+	"PersonalMain/utility/ErrorCode"
+	"PersonalMain/utility/ResultUtil"
 	"github.com/gogf/gf/v2/errors/gerror"
-	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/text/gregex"
 	"net/http"
@@ -29,20 +30,12 @@ func TimestampMiddleware(r *ghttp.Request) {
 			r.Middleware.Next()
 		} else {
 			if err != nil {
-				r.Response.WriteJson(g.Map{
-					"code":    40011,
-					"message": "时间戳过期",
-					"data":    nil,
-				})
+				ResultUtil.ErrorNoData(r, ErrorCode.TimestampExpired)
 			}
 		}
 	} else {
 		if err != nil {
-			r.Response.WriteJson(g.Map{
-				"code":    40010,
-				"message": "时间戳格式错误",
-				"data":    nil,
-			})
+			ResultUtil.ErrorNoData(r, ErrorCode.TimestampVerifyFailed)
 		}
 	}
 }
