@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"PersonalMain/internal/controller/auth"
+	"PersonalMain/internal/controller/auth/token"
+	"PersonalMain/internal/controller/auth/user"
 	"PersonalMain/internal/middleware"
 	"context"
 
@@ -21,21 +22,28 @@ var (
 			s := g.Server()
 			s.Group("/api", func(group *ghttp.RouterGroup) {
 				group.Middleware(middleware.TimestampMiddleware)
+				group.Middleware(middleware.JsonResponseMiddleware)
+
 				group.Group("/", func(group *ghttp.RouterGroup) {
-					group.Middleware(ghttp.MiddlewareHandlerResponse)
 					group.Bind(
 						hello.NewV1(),
 					)
 				})
 				group.Group("/auth", func(group *ghttp.RouterGroup) {
-					group.Middleware(ghttp.MiddlewareHandlerResponse)
-					group.Bind(
-						auth.NewAuthV1(),
-					)
+					group.Group("/user", func(group *ghttp.RouterGroup) {
+						group.Bind(
+							user.NewAuthV1(),
+						)
+					})
+					group.Group("/token", func(group *ghttp.RouterGroup) {
+						group.Bind(
+							token.NewTokenV1(),
+						)
+					})
 				})
 			})
+			s.SetServerRoot("resource/public")
 			s.Run()
-			s.SetServerRoot("public")
 			return nil
 		},
 	}

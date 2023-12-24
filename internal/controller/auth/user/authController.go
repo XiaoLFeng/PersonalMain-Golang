@@ -1,4 +1,4 @@
-package auth
+package user
 
 import (
 	"PersonalMain/api/request"
@@ -12,5 +12,5 @@ func (c *ControllerV1) AuthRegister(_ context.Context, req *request.RegisterReq)
 		Message: "Success",
 		Data:    req,
 	}
-	return res, nil
+	return res, err
 }
