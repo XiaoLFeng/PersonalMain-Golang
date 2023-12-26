@@ -4,7 +4,9 @@ import (
 	"PersonalMain/internal/service/TokenService"
 	"PersonalMain/utility/ErrorCode"
 	"PersonalMain/utility/ResultUtil"
+	"context"
 	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/text/gregex"
 	"net/http"
@@ -26,19 +28,24 @@ type DefaultHandlerResponse struct {
 // 检查时间戳误差是否在
 func TimestampMiddleware(r *ghttp.Request) {
 	// 检查时间戳误差是否在
-	timestamp, err := strconv.ParseInt(r.GetHeader("timestamp"), 10, 64)
-	if gregex.IsMatch(`^[0-9]{13,14}$`, []byte(strconv.FormatInt(timestamp, 10))) {
-		if timestamp+int64(2000) > time.Now().UnixMilli() && timestamp-int64(2000) < time.Now().UnixMilli() {
-			r.Middleware.Next()
+	timestampString := r.GetHeader("timestamp")
+	if len(timestampString) >= 13 && len(timestampString) <= 14 {
+		timestamp, err := strconv.ParseInt(timestampString, 10, 64)
+		if gregex.IsMatch(`^[0-9]+$`, []byte(strconv.FormatInt(timestamp, 10))) {
+			if timestamp+int64(2000) > time.Now().UnixMilli() && timestamp-int64(2000) < time.Now().UnixMilli() {
+				r.Middleware.Next()
+			} else {
+				if err != nil {
+					ResultUtil.ErrorNoData(r, ErrorCode.TimestampExpired)
+				}
+			}
 		} else {
 			if err != nil {
-				ResultUtil.ErrorNoData(r, ErrorCode.TimestampExpired)
+				ResultUtil.ErrorNoData(r, ErrorCode.TimestampVerifyFailed)
 			}
 		}
 	} else {
-		if err != nil {
-			ResultUtil.ErrorNoData(r, ErrorCode.TimestampVerifyFailed)
-		}
+		ResultUtil.ErrorNoData(r, ErrorCode.TimestampVerifyFailed)
 	}
 }
 
@@ -101,6 +108,7 @@ func JsonResponseMiddleware(r *ghttp.Request) {
 				msg = ErrorCode.ServerUnknownError.Message()
 				output = ErrorCode.ServerUnknownError.Output()
 			}
+			g.Log().Cat("Unknown").Info(context.Background(), output, msg)
 		}
 	}
 

@@ -77,3 +77,21 @@ func (_ DefaultTokenImpl) LoginToken(req *ghttp.Request, userDO do.UserDO) *do.T
 	}
 	return nil
 }
+
+// DeleteToken
+//
+// 删除Token业务
+func (_ DefaultTokenImpl) DeleteToken(req *ghttp.Request) bool {
+	// 获取 Cookie 中的 token
+	cookieToken := req.Cookie.Get("token")
+	if cookieToken != nil {
+		// 数据库查找 token
+		token := tokenDAO.GetToken(cookieToken.String())
+		// 检查数据库中是否存在该 token
+		if token != nil {
+			// 删除数据库
+			return tokenDAO.DeleteToken(token.Token)
+		}
+	}
+	return false
+}

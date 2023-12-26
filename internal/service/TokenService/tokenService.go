@@ -18,4 +18,5 @@ type TokenService interface {
 	GetToken(*ghttp.Request) *do.TokenDO
 	VerifyToken(*do.TokenDO) bool
 	LoginToken(*ghttp.Request, do.UserDO) *do.TokenDO
+	DeleteToken(*ghttp.Request) bool
 }

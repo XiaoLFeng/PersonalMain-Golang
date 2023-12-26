@@ -14,4 +14,5 @@ type UserService interface {
 	UserRegister(*ghttp.Request, *entity.UserRegisterVO)
 	UserLogin(*ghttp.Request, *entity.UserLoginVO)
 	CheckLogin(*ghttp.Request)
+	UserLogout(*ghttp.Request)
 }

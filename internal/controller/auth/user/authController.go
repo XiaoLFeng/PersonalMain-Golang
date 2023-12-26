@@ -11,6 +11,10 @@ import (
 	"github.com/gogf/gf/v2/net/ghttp"
 )
 
+func userService() UserService.UserService {
+	return UserService.NewUserService()
+}
+
 // AuthRegister
 //
 // 用户注册
@@ -23,8 +27,7 @@ func (*ControllerV1) AuthRegister(ctx context.Context, _ *request.RegisterReq) (
 		errStruct := g.Validator().Data(userRegister).Run(ctx)
 		if errStruct == nil {
 			// 进行用户注册
-			userService := UserService.NewUserService()
-			userService.UserRegister(req, &userRegister)
+			userService().UserRegister(req, &userRegister)
 		} else {
 			ResultUtil.Error(req, ErrorCode.RequestBodyMismatching, errStruct.Map())
 		}
@@ -43,8 +46,7 @@ func (*ControllerV1) AuthLogin(ctx context.Context, _ *request.LoginReq) (res *r
 		errStruct := g.Validator().Data(userLogin).Run(ctx)
 		if errStruct == nil {
 			// 进行用户注册
-			userService := UserService.NewUserService()
-			userService.UserLogin(req, &userLogin)
+			userService().UserLogin(req, &userLogin)
 		} else {
 			ResultUtil.Error(req, ErrorCode.RequestBodyMismatching, errStruct.Map())
 		}
@@ -60,7 +62,16 @@ func (*ControllerV1) AuthLogin(ctx context.Context, _ *request.LoginReq) (res *r
 func (*ControllerV1) AuthCheck(ctx context.Context, _ *request.CheckReq) (res *request.CheckRes, err error) {
 	req := ghttp.RequestFromCtx(ctx)
 	// 获取数据库中用户信息
-	userService := UserService.NewUserService()
-	userService.CheckLogin(req)
+	userService().CheckLogin(req)
+	return res, err
+}
+
+// AuthLogout
+//
+// 用户登出
+func (*ControllerV1) AuthLogout(ctx context.Context, _ *request.LogoutReq) (res *request.LogoutRes, err error) {
+	req := ghttp.RequestFromCtx(ctx)
+	// 获取数据库中用户信息
+	userService().UserLogout(req)
 	return res, err
 }

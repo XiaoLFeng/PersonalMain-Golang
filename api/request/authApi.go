@@ -13,7 +13,11 @@ type LoginReq struct {
 type CheckReq struct {
 	g.Meta `path:"/check" tags:"检查登录" method:"get" summary:"检查登录"`
 }
+type LogoutReq struct {
+	g.Meta `path:"/logout" tags:"登出" method:"delete" summary:"登出账号"`
+}
 
 type RegisterRes struct{}
 type LoginRes struct{}
 type CheckRes struct{}
+type LogoutRes struct{}

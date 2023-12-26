@@ -98,3 +98,14 @@ func (*DefaultUserImpl) CheckLogin(req *ghttp.Request) {
 		ResultUtil.ErrorNoData(req, ErrorCode.UserNotExist)
 	}
 }
+
+// UserLogout
+//
+// 用户登出
+func (*DefaultUserImpl) UserLogout(req *ghttp.Request) {
+	if tokenService().DeleteToken(req) {
+		ResultUtil.Success(req, "用户已退出登录", nil)
+	} else {
+		ResultUtil.ErrorNoData(req, ErrorCode.TokenNotFound)
+	}
+}
