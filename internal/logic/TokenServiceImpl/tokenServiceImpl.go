@@ -1,8 +1,10 @@
-package logic
+package TokenServiceImpl
 
 import (
 	"PersonalMain/internal/dao/tokenDAO"
 	"PersonalMain/internal/model/do"
+	"PersonalMain/utility/ErrorCode"
+	"PersonalMain/utility/ResultUtil"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"time"
 )
@@ -51,4 +53,27 @@ func (_ DefaultTokenImpl) VerifyToken(token *do.TokenDO) bool {
 	} else {
 		return false
 	}
+}
+
+// LoginToken
+//
+// 登录Token业务
+func (_ DefaultTokenImpl) LoginToken(req *ghttp.Request, userDO do.UserDO) *do.TokenDO {
+	// 更新数据库
+	newTokenDO, err := tokenDAO.UpdateToken(req.Cookie.Get("token").String(), userDO.Id)
+	if err == nil {
+		if newTokenDO != nil {
+			return newTokenDO
+		}
+	} else {
+		switch err.Error() {
+		case "DatabaseError":
+			ResultUtil.ErrorNoData(req, ErrorCode.ServerDatabaseInteriorError)
+		case "AlreadyLogin":
+			ResultUtil.ErrorNoData(req, ErrorCode.AlreadyLogin)
+		case "TokenNotFound":
+			ResultUtil.ErrorNoData(req, ErrorCode.TokenNotFound)
+		}
+	}
+	return nil
 }

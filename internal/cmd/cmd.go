@@ -21,8 +21,8 @@ var (
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
 			s := g.Server()
 			s.Group("/api", func(group *ghttp.RouterGroup) {
-				group.Middleware(middleware.TimestampMiddleware)
 				group.Middleware(middleware.JsonResponseMiddleware)
+				group.Middleware(middleware.TimestampMiddleware)
 
 				group.Group("/", func(group *ghttp.RouterGroup) {
 					group.Bind(
@@ -31,6 +31,7 @@ var (
 				})
 				group.Group("/auth", func(group *ghttp.RouterGroup) {
 					group.Group("/user", func(group *ghttp.RouterGroup) {
+						group.Middleware(middleware.VerifyTokenMiddleware)
 						group.Bind(
 							user.NewAuthV1(),
 						)

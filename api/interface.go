@@ -15,8 +15,10 @@ type IHelloV1 interface {
 
 type IAuthV1 interface {
 	AuthRegister(ctx context.Context, req *request.RegisterReq) (res *request.RegisterRes, err error)
+	AuthLogin(ctx context.Context, req *request.LoginReq) (res *request.LoginRes, err error)
 }
 
 type ITokenV1 interface {
 	TokenCreate(ctx context.Context, req *request.TokenCreateReq) (res *request.TokenCreateRes, err error)
+	TokenVerify(ctx context.Context, req *request.TokenVerifyReq) (res *request.TokenVerifyRes, err error)
 }

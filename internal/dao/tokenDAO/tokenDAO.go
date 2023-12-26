@@ -2,6 +2,7 @@ package tokenDAO
 
 import (
 	"PersonalMain/internal/model/do"
+	"PersonalMain/utility/CustomError"
 	"PersonalMain/utility/Processing"
 	"context"
 	"github.com/gogf/gf/v2/frame/g"
@@ -21,10 +22,10 @@ func CreateToken() do.TokenDO {
 	}
 	_, err := g.Model("xf_token").Data(token).OmitEmpty().Insert()
 	if err == nil {
-		g.Log().Cat("Database").Cat("Token").Notice(context.TODO(), "Token", token.Token, "创建成功")
+		g.Log().Cat("Database").Cat("Token").Notice(context.Background(), "Token", token.Token, "创建成功")
 		return token
 	} else {
-		g.Log().Cat("Database").Cat("Token").Error(context.TODO(), err.Error())
+		g.Log().Cat("Database").Cat("Token").Error(context.Background(), err.Error())
 		return do.TokenDO{}
 	}
 }
@@ -40,18 +41,18 @@ func GetToken(token string) *do.TokenDO {
 		if !result.IsEmpty() {
 			err := result.Struct(&tokenDO)
 			if err != nil {
-				g.Log().Cat("Database").Cat("Token").Error(context.TODO(), err.Error())
+				g.Log().Cat("Database").Cat("Token").Error(context.Background(), err.Error())
 				return nil
 			} else {
-				g.Log().Cat("Database").Cat("Token").Notice(context.TODO(), "Token", tokenDO.Token, "获取成功")
+				g.Log().Cat("Database").Cat("Token").Notice(context.Background(), "Token", tokenDO.Token, "获取成功")
 				return &tokenDO
 			}
 		} else {
-			g.Log().Cat("Database").Cat("Token").Notice(context.TODO(), "xf_token 数据表为空")
+			g.Log().Cat("Database").Cat("Token").Notice(context.Background(), "Token", token, "获取失败，原因：Token不存在")
 			return nil
 		}
 	} else {
-		g.Log().Cat("Database").Cat("Token").Error(context.TODO(), err.Error())
+		g.Log().Cat("Database").Cat("Token").Error(context.Background(), err.Error())
 		return nil
 	}
 }
@@ -59,11 +60,48 @@ func GetToken(token string) *do.TokenDO {
 // DeleteToken
 //
 // 删除Token业务
-func DeleteToken(token string) {
+func DeleteToken(token string) bool {
 	_, err := g.Model("xf_token").Where("token = ?", token).Delete()
 	if err != nil {
-		g.Log().Cat("Database").Cat("Token").Error(context.TODO(), err.Error())
+		g.Log().Cat("Database").Cat("Token").Error(context.Background(), err.Error())
+		return false
 	} else {
-		g.Log().Cat("Database").Cat("Token").Notice(context.TODO(), "Token", token, "删除成功")
+		g.Log().Cat("Database").Cat("Token").Notice(context.Background(), "Token", token, "删除成功")
+		return true
+	}
+}
+
+// UpdateToken
+//
+// 更新Token业务
+func UpdateToken(token string, userId *int64) (*do.TokenDO, error) {
+	// 查找 token
+	getTokenDO := GetToken(token)
+	if getTokenDO != nil {
+		if getTokenDO.UserId == nil {
+			newTokenDO := do.TokenDO{
+				Id:        nil,
+				UserId:    userId,
+				Token:     (*getTokenDO).Token,
+				ExpiredAt: time.Now().Add(time.Hour * 24),
+				CreatedAt: (*getTokenDO).CreatedAt,
+			}
+			_, err := g.Model("xf_token").Data(newTokenDO).Where("token = ?", getTokenDO.Token).Update()
+			if err != nil {
+				g.Log().Cat("Database").Cat("Token").Error(context.Background(), err.Error())
+				errorData := &CustomError.CustomError{Message: "DatabaseError"}
+				return nil, errorData
+			} else {
+				g.Log().Cat("Database").Cat("Token").Notice(context.Background(), "Token", getTokenDO.Token, "更新成功")
+				return &newTokenDO, nil
+			}
+		} else {
+			g.Log().Cat("Database").Cat("Token").Notice(context.Background(), "Token", getTokenDO.Token, "更新失败，原因：该Token已登陆")
+			errorData := &CustomError.CustomError{Message: "AlreadyLogin"}
+			return nil, errorData
+		}
+	} else {
+		errorData := &CustomError.CustomError{Message: "TokenNotFound"}
+		return nil, errorData
 	}
 }

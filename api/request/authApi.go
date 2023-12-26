@@ -5,16 +5,11 @@ import (
 )
 
 type RegisterReq struct {
-	g.Meta `path:"/register" tags:"注册" method:"get" summary:"注册账号"`
-
-	Username string `json:"username"`
+	g.Meta `path:"/register" tags:"注册" method:"post" summary:"注册账号"`
+}
+type LoginReq struct {
+	g.Meta `path:"/login" tags:"登录" method:"get" summary:"登录账号"`
 }
 
-type RegisterRes struct {
-	g.Meta `mime:"application/json" example:"string"`
-
-	Output  string `json:"output"`
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-	Data    any    `json:"data"`
-}
+type RegisterRes struct{}
+type LoginRes struct{}

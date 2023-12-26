@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"PersonalMain/internal/service/TokenService"
 	"PersonalMain/utility/ErrorCode"
 	"PersonalMain/utility/ResultUtil"
 	"github.com/gogf/gf/v2/errors/gerror"
@@ -13,6 +14,7 @@ import (
 
 // DefaultHandlerResponse is the default implementation of HandlerResponse.
 type DefaultHandlerResponse struct {
+	Output  string      `json:"output"  dc:"Output data for certain request according API definition"`
 	Code    int         `json:"code"    dc:"Error code"`
 	Message string      `json:"message" dc:"Error message"`
 	Data    interface{} `json:"data"    dc:"Result data for certain request according API definition"`
@@ -40,6 +42,25 @@ func TimestampMiddleware(r *ghttp.Request) {
 	}
 }
 
+// VerifyTokenMiddleware
+//
+// 校验 TokenServiceImpl 是否有效
+func VerifyTokenMiddleware(r *ghttp.Request) {
+	// 校验 token
+	tokenService := TokenService.NewTokenService()
+	getToken := tokenService.GetToken(r)
+	if getToken != nil {
+		// 检查 TokenServiceImpl 是否有效
+		if tokenService.VerifyToken(getToken) {
+			r.Middleware.Next()
+		} else {
+			ResultUtil.ErrorNoData(r, ErrorCode.TokenExpired)
+		}
+	} else {
+		ResultUtil.ErrorNoData(r, ErrorCode.TokenNotFound)
+	}
+}
+
 func JsonResponseMiddleware(r *ghttp.Request) {
 	r.Middleware.Next()
 
@@ -49,10 +70,11 @@ func JsonResponseMiddleware(r *ghttp.Request) {
 	}
 
 	var (
-		msg  = r.GetRequest("message").String()
-		err  = r.GetError()
-		res  = r.GetHandlerResponse()
-		code int
+		output = r.GetRequest("output").String()
+		msg    = r.GetRequest("message").String()
+		err    = r.GetError()
+		res    = r.GetHandlerResponse()
+		code   int
 	)
 	if err != nil {
 		if r.GetRequest("code") == nil {
@@ -74,14 +96,16 @@ func JsonResponseMiddleware(r *ghttp.Request) {
 			err = gerror.New(r.GetRequest("message").String())
 			r.SetError(err)
 		} else {
-			code = 200
+			code = ErrorCode.ServerUnknownError.Code()
 			if msg == "" {
-				msg = "success"
+				msg = ErrorCode.ServerUnknownError.Message()
+				output = ErrorCode.ServerUnknownError.Output()
 			}
 		}
 	}
 
 	r.Response.WriteJson(DefaultHandlerResponse{
+		Output:  output,
 		Code:    code,
 		Message: msg,
 		Data:    res,
