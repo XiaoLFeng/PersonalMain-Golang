@@ -57,3 +57,35 @@ func GetUser(user string) *do.UserDO {
 		return nil
 	}
 }
+
+// GetUserByToken
+//
+// 通过Token获取用户信息
+func GetUserByToken(token string) *do.UserDO {
+	userDO := do.UserDO{}
+	getTokenResult, err := g.Model("xf_token").Fields("user_id").Where("token = ?", token).One()
+	if err == nil {
+		result, err := g.Model("xf_user").Where("id = ?", getTokenResult["user_id"]).One()
+		if err == nil {
+			if result.IsEmpty() {
+				g.Log().Cat("Database").Cat("User").Notice(context.Background(), "无法获取", token, "用户。原因：不存在此用户")
+				return nil
+			} else {
+				err := result.Struct(&userDO)
+				if err != nil {
+					g.Log().Cat("Database").Cat("User").Error(context.Background(), err.Error())
+					return nil
+				} else {
+					g.Log().Cat("Database").Cat("User").Notice(context.Background(), "Token", token, "获取用户", userDO.UserName, "成功")
+					return &userDO
+				}
+			}
+		} else {
+			g.Log().Cat("Database").Cat("User").Error(context.Background(), err.Error())
+			return nil
+		}
+	} else {
+		g.Log().Cat("Database").Cat("User").Error(context.Background(), err.Error())
+		return nil
+	}
+}

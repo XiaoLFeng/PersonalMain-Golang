@@ -14,7 +14,7 @@ import (
 // AuthRegister
 //
 // 用户注册
-func (_ *ControllerV1) AuthRegister(ctx context.Context, _ *request.RegisterReq) (res *request.RegisterRes, err error) {
+func (*ControllerV1) AuthRegister(ctx context.Context, _ *request.RegisterReq) (res *request.RegisterRes, err error) {
 	userRegister := entity.UserRegisterVO{}
 	req := ghttp.RequestFromCtx(ctx)
 	// 获取 model 表单信息
@@ -34,7 +34,7 @@ func (_ *ControllerV1) AuthRegister(ctx context.Context, _ *request.RegisterReq)
 	return res, err
 }
 
-func (_ *ControllerV1) AuthLogin(ctx context.Context, _ *request.LoginReq) (res *request.LoginRes, err error) {
+func (*ControllerV1) AuthLogin(ctx context.Context, _ *request.LoginReq) (res *request.LoginRes, err error) {
 	userLogin := entity.UserLoginVO{}
 	req := ghttp.RequestFromCtx(ctx)
 	// 获取 model 表单信息
@@ -51,5 +51,16 @@ func (_ *ControllerV1) AuthLogin(ctx context.Context, _ *request.LoginReq) (res 
 	} else {
 		ResultUtil.Error(req, ErrorCode.RequestBodyError, errStruct.Error())
 	}
+	return res, err
+}
+
+// AuthCheck
+//
+// 检查登录
+func (*ControllerV1) AuthCheck(ctx context.Context, _ *request.CheckReq) (res *request.CheckRes, err error) {
+	req := ghttp.RequestFromCtx(ctx)
+	// 获取数据库中用户信息
+	userService := UserService.NewUserService()
+	userService.CheckLogin(req)
 	return res, err
 }
