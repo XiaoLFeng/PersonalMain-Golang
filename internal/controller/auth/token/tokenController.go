@@ -14,7 +14,7 @@ import (
 // TokenCreate
 //
 // 生成 TokenServiceImpl
-func (_ *ControllerV1) TokenCreate(ctx context.Context, _ *request.TokenCreateReq) (res *request.TokenCreateRes, err error) {
+func (*ControllerV1) TokenCreate(ctx context.Context, _ *request.TokenCreateReq) (res *request.TokenCreateRes, err error) {
 	// 获取 Cookie 是否存在
 	req := ghttp.RequestFromCtx(ctx)
 	hasCookie := req.Cookie.Contains("token")
@@ -42,7 +42,7 @@ func (_ *ControllerV1) TokenCreate(ctx context.Context, _ *request.TokenCreateRe
 // TokenVerify
 //
 // 验证 TokenServiceImpl
-func (_ *ControllerV1) TokenVerify(ctx context.Context, _ *request.TokenVerifyReq) (res *request.TokenVerifyRes, err error) {
+func (*ControllerV1) TokenVerify(ctx context.Context, _ *request.TokenVerifyReq) (res *request.TokenVerifyRes, err error) {
 	// 获取 Cookie 是否存在
 	req := ghttp.RequestFromCtx(ctx)
 	hasCookie := req.Cookie.Contains("token")
