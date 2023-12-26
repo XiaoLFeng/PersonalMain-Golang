@@ -69,7 +69,7 @@ func (_ *DefaultUserImpl) UserLogin(req *ghttp.Request, userVO *entity.UserLogin
 		// 比对密码-=
 		err := bcrypt.CompareHashAndPassword([]byte(getUserDO.Password), []byte(userVO.Password))
 		if err == nil {
-			// TokenServiceImpl 注册更新
+			// Token 注册更新
 			getTokenDO := tokenService().LoginToken(req, *getUserDO)
 			if getTokenDO != nil {
 				getUserDO.Password = ""
@@ -84,6 +84,14 @@ func (_ *DefaultUserImpl) UserLogin(req *ghttp.Request, userVO *entity.UserLogin
 	}
 }
 
-func (_ *DefaultUserImpl) CheckLogin(req *ghttp.Request) {
-
+func (*DefaultUserImpl) CheckLogin(req *ghttp.Request) {
+	// 获取 Token
+	userDO := userDAO.GetUserByToken(req.Cookie.Get("token").String())
+	if userDO != nil {
+		userDO.Password = ""
+		userDO.OldPassword = nil
+		ResultUtil.Success(req, "用户已处于登陆状态", userDO)
+	} else {
+		ResultUtil.ErrorNoData(req, ErrorCode.UserNotExist)
+	}
 }
