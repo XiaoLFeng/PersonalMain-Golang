@@ -1,6 +1,7 @@
 package user
 
 import (
+	"PersonalMain/api"
 	"PersonalMain/api/request"
 	"PersonalMain/internal/model/entity"
 	"PersonalMain/internal/service/UserService"
@@ -13,6 +14,12 @@ import (
 
 func userService() UserService.UserService {
 	return UserService.NewUserService()
+}
+
+type ControllerV1 struct{}
+
+func NewAuthV1() api.IAuthV1 {
+	return &ControllerV1{}
 }
 
 // AuthRegister
@@ -29,9 +36,11 @@ func (*ControllerV1) AuthRegister(ctx context.Context, _ *request.RegisterReq) (
 			// 进行用户注册
 			userService().UserRegister(req, &userRegister)
 		} else {
+			g.Log().Cat("Struct").Cat("Auth").Error(ctx, errStruct.Error())
 			ResultUtil.Error(req, ErrorCode.RequestBodyMismatching, errStruct.Map())
 		}
 	} else {
+		g.Log().Cat("Struct").Cat("Auth").Error(ctx, errStruct.Error())
 		ResultUtil.Error(req, ErrorCode.RequestBodyError, errStruct.Error())
 	}
 	return res, err
@@ -48,6 +57,7 @@ func (*ControllerV1) AuthLogin(ctx context.Context, _ *request.LoginReq) (res *r
 			// 进行用户注册
 			userService().UserLogin(req, &userLogin)
 		} else {
+			g.Log().Cat("Struct").Cat("Auth").Error(ctx, errStruct.Error())
 			ResultUtil.Error(req, ErrorCode.RequestBodyMismatching, errStruct.Map())
 		}
 	} else {

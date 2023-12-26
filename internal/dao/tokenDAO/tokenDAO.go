@@ -74,7 +74,7 @@ func DeleteToken(token string) bool {
 // UpdateToken
 //
 // 更新Token业务
-func UpdateToken(token string, userId *int64) (*do.TokenDO, error) {
+func UpdateToken(token string, userId *uint64) (*do.TokenDO, error) {
 	// 查找 token
 	getTokenDO := GetToken(token)
 	if getTokenDO != nil {

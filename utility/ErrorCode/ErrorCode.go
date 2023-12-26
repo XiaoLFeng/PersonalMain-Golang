@@ -25,6 +25,10 @@ var (
 	RequestBodyError            = ErrorCode{output: "RequestBodyError", code: 40201, message: "请求体错误"}
 	UserExist                   = ErrorCode{output: "UserExists", code: 40300, message: "用户已存在"}
 	UserNotExist                = ErrorCode{output: "UserNotExist", code: 40301, message: "用户不存在"}
+	FriendLinkAlreadyExists     = ErrorCode{output: "FriendLinkAlreadyExists", code: 40302, message: "友链已存在"}
+	LinkAddressError            = ErrorCode{output: "LinkAddressError", code: 40303, message: "链接地址错误"}
+	LikeLinkAlreadyExists       = ErrorCode{output: "LikeLinkAlreadyExists", code: 40304, message: "链接已存在"}
+	LinkAcceptDenied            = ErrorCode{output: "LinkAcceptDenied", code: 40305, message: "链接接受协议拒绝"}
 	ServerUnknownError          = ErrorCode{output: "ServerUnknownError", code: 50000, message: "服务器未知错误"}
 	ServerDatabaseInteriorError = ErrorCode{output: "ServerDatabaseInteriorError", code: 50001, message: "服务器数据库内部错误"}
 )

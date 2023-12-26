@@ -109,3 +109,18 @@ func (*DefaultUserImpl) UserLogout(req *ghttp.Request) {
 		ResultUtil.ErrorNoData(req, ErrorCode.TokenNotFound)
 	}
 }
+
+// UserCurrent
+//
+// 获取当前用户信息
+func (*DefaultUserImpl) UserCurrent(req *ghttp.Request) *do.UserDO {
+	// 获取 Token
+	userDO := userDAO.GetUserByToken(req.Cookie.Get("token").String())
+	if userDO != nil {
+		userDO.Password = ""
+		userDO.OldPassword = nil
+		return userDO
+	} else {
+		return nil
+	}
+}

@@ -1,6 +1,7 @@
 package token
 
 import (
+	"PersonalMain/api"
 	"PersonalMain/api/request"
 	"PersonalMain/internal/model/do"
 	"PersonalMain/internal/service/TokenService"
@@ -10,6 +11,12 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 )
+
+type ControllerV1 struct{}
+
+func NewTokenV1() api.ITokenV1 {
+	return &ControllerV1{}
+}
 
 // TokenCreate
 //

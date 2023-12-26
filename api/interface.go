@@ -9,10 +9,6 @@ import (
 	"context"
 )
 
-type IHelloV1 interface {
-	Hello(ctx context.Context, req *request.HelloReq) (res *request.HelloRes, err error)
-}
-
 type IAuthV1 interface {
 	AuthRegister(ctx context.Context, req *request.RegisterReq) (res *request.RegisterRes, err error)
 	AuthLogin(ctx context.Context, req *request.LoginReq) (res *request.LoginRes, err error)
@@ -23,4 +19,14 @@ type IAuthV1 interface {
 type ITokenV1 interface {
 	TokenCreate(ctx context.Context, req *request.TokenCreateReq) (res *request.TokenCreateRes, err error)
 	TokenVerify(ctx context.Context, req *request.TokenVerifyReq) (res *request.TokenVerifyRes, err error)
+}
+
+type ILinkV1 interface {
+	GetLinkFriend(ctx context.Context, req *request.GetLinkFriendReq) (res *request.GetLinkFriendRes, err error)
+	AddLinkFriend(ctx context.Context, req *request.AddLinkFriendReq) (res *request.AddLinkFriendRes, err error)
+	GetSortAndLink(ctx context.Context, req *request.GetSortAndLinkReq) (res *request.GetSortAndLinkRes, err error)
+}
+
+type IUserV1 interface {
+	GetUserCurrent(ctx context.Context, req *request.GetUserReq) (res *request.GetUserRes, err error)
 }
