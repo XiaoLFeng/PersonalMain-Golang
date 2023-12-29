@@ -31,3 +31,7 @@ type ILinkV1 interface {
 type IUserV1 interface {
 	GetUserCurrent(ctx context.Context, req *request.GetUserReq) (res *request.GetUserRes, err error)
 }
+
+type ISponsorV1 interface {
+	GetSponsor(context.Context, *request.GetSponsorReq) (*request.GetSponsorRes, error)
+}

@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"PersonalMain/internal/controller/auth/link/custom/friend"
+	"PersonalMain/internal/controller/auth/link/custom/sponsor"
 	"PersonalMain/internal/controller/auth/token"
 	authUser "PersonalMain/internal/controller/auth/user"
 	"PersonalMain/internal/controller/user"
@@ -49,6 +50,11 @@ var (
 						group.Group("/friend", func(group *ghttp.RouterGroup) {
 							group.Bind(
 								friend.NewLinkCustomFriendV1(),
+							)
+						})
+						group.Group("/sponsor", func(group *ghttp.RouterGroup) {
+							group.Bind(
+								sponsor.NewSponsorV1(),
 							)
 						})
 						group.Group("/location", func(group *ghttp.RouterGroup) {
