@@ -11,7 +11,11 @@ type AddLinkFriendReq struct {
 type GetSortAndLinkReq struct {
 	g.Meta `path:"/sort" tags:"获取分类和友链" method:"get" summary:"获取分类和友链"`
 }
+type DelLinkFriendReq struct {
+	g.Meta `path:"/delete" tags:"删除友链" method:"delete" summary:"删除友链"`
+}
 
 type GetLinkFriendRes struct{}
 type AddLinkFriendRes struct{}
 type GetSortAndLinkRes struct{}
+type DelLinkFriendRes struct{}

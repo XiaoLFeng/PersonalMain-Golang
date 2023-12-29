@@ -25,6 +25,7 @@ type ILinkV1 interface {
 	GetLinkFriend(ctx context.Context, req *request.GetLinkFriendReq) (res *request.GetLinkFriendRes, err error)
 	AddLinkFriend(ctx context.Context, req *request.AddLinkFriendReq) (res *request.AddLinkFriendRes, err error)
 	GetSortAndLink(ctx context.Context, req *request.GetSortAndLinkReq) (res *request.GetSortAndLinkRes, err error)
+	DelLinkFriend(ctx context.Context, req *request.DelLinkFriendReq) (res *request.DelLinkFriendRes, err error)
 }
 
 type IUserV1 interface {

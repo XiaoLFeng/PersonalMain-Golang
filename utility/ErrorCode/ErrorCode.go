@@ -29,6 +29,7 @@ var (
 	LinkAddressError            = ErrorCode{output: "LinkAddressError", code: 40303, message: "链接地址错误"}
 	LikeLinkAlreadyExists       = ErrorCode{output: "LikeLinkAlreadyExists", code: 40304, message: "链接已存在"}
 	LinkAcceptDenied            = ErrorCode{output: "LinkAcceptDenied", code: 40305, message: "链接接受协议拒绝"}
+	FriendLinkDoesNotExist      = ErrorCode{output: "FriendLinkDoesNotExist", code: 40306, message: "友链不存在"}
 	ServerUnknownError          = ErrorCode{output: "ServerUnknownError", code: 50000, message: "服务器未知错误"}
 	ServerDatabaseInteriorError = ErrorCode{output: "ServerDatabaseInteriorError", code: 50001, message: "服务器数据库内部错误"}
 )

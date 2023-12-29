@@ -15,4 +15,5 @@ type LinkService interface {
 	GetLinkFriend(*ghttp.Request)
 	GetSortAndLink(*ghttp.Request)
 	AddLinkFriendCustom(*ghttp.Request, entity.LinkAddFriendVO) (bool, *do.BlogDO, string)
+	DelLinkFriendCustom(*ghttp.Request, entity.LinkDelFriendVO) (bool, string)
 }

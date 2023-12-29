@@ -108,6 +108,28 @@ func GetBlogForName(linkName string) *do.BlogDO {
 	}
 }
 
+// GetBlogForId
+//
+// 检查是否已存在此博客
+func GetBlogForId(id uint64) *do.BlogDO {
+	// 数据库读取信息
+	var blogDO do.BlogDO
+	result, err := g.Model("xf_blog").Where("id = ?", id).One()
+	if err == nil {
+		if !result.IsEmpty() {
+			_ = result.Struct(&blogDO)
+			g.Log().Cat("Database").Cat("Blog").Notice(context.Background(), "xf_blog 数据表成功提取", id, "博客信息")
+			return &blogDO
+		} else {
+			g.Log().Cat("Database").Cat("Blog").Notice(context.Background(), "xf_blog 数据表中没有", id, "博客友链相关信息")
+			return nil
+		}
+	} else {
+		g.Log().Cat("Database").Cat("Blog").Error(context.Background(), err.Error())
+		return nil
+	}
+}
+
 // GetBlogForDomain
 //
 // 检查是否存在相似链接
@@ -138,6 +160,21 @@ func CreateBlog(newBlogDO do.BlogDO) bool {
 	_, err := g.Model("xf_blog").Data(newBlogDO).Insert()
 	if err == nil {
 		g.Log().Cat("Database").Cat("Blog").Notice(context.Background(), "xf_blog 数据表成功创建", newBlogDO.BlogTitle, "博客信息")
+		return true
+	} else {
+		g.Log().Cat("Database").Cat("Blog").Error(context.Background(), err.Error())
+		return false
+	}
+}
+
+// DeleteBlog
+//
+// 删除博客
+func DeleteBlog(id uint64) bool {
+	// 数据库读取信息
+	_, err := g.Model("xf_blog").Where("id = ?", id).Delete()
+	if err == nil {
+		g.Log().Cat("Database").Cat("Blog").Notice(context.Background(), "xf_blog 数据表成功删除", id, "博客信息")
 		return true
 	} else {
 		g.Log().Cat("Database").Cat("Blog").Error(context.Background(), err.Error())

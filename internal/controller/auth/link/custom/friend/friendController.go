@@ -85,3 +85,39 @@ func (*ControllerV1) AddLinkFriend(ctx context.Context, _ *request.AddLinkFriend
 	}
 	return res, err
 }
+
+// DelLinkFriend
+//
+// 删除友链
+func (*ControllerV1) DelLinkFriend(ctx context.Context, _ *request.DelLinkFriendReq) (res *request.DelLinkFriendRes, err error) {
+	req := ghttp.RequestFromCtx(ctx)
+	// 获取业务
+	delFriendVO := entity.LinkDelFriendVO{}
+	err = req.GetRequestStruct(&delFriendVO)
+	if err == nil {
+		// 检查对象
+		errStruct := g.Validator().Data(delFriendVO).Run(ctx)
+		if errStruct == nil {
+			hasDel, info := linkService().DelLinkFriendCustom(req, delFriendVO)
+			if hasDel {
+				ResultUtil.Success(req, "删除成功", nil)
+			} else {
+				switch info {
+				case "FriendLinkDoesNotExist":
+					ResultUtil.ErrorNoData(req, ErrorCode.FriendLinkDoesNotExist)
+				case "DelLinkFriendError":
+					ResultUtil.ErrorNoData(req, ErrorCode.ServerDatabaseInteriorError)
+				default:
+					ResultUtil.ErrorNoData(req, ErrorCode.ServerUnknownError)
+				}
+			}
+		} else {
+			g.Log().Cat("Struct").Cat("Link").Notice(ctx, errStruct.Map())
+			ResultUtil.Error(req, ErrorCode.RequestBodyError, errStruct.Error())
+		}
+	} else {
+		g.Log().Cat("Struct").Cat("Link").Error(ctx, err.Error())
+		ResultUtil.Error(req, ErrorCode.RequestBodyError, err.Error())
+	}
+	return res, err
+}

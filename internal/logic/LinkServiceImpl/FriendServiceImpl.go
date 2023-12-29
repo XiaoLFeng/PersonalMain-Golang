@@ -101,3 +101,21 @@ func (*DefaultLinkImpl) AddLinkFriendCustom(req *ghttp.Request, addFriendVO enti
 		return false, nil, "FriendLinkAlreadyExists"
 	}
 }
+
+// DelLinkFriendCustom
+//
+// 删除友链
+func (*DefaultLinkImpl) DelLinkFriendCustom(_ *ghttp.Request, delFriendVO entity.LinkDelFriendVO) (bool, string) {
+	// 检查是否已存在此博客
+	blogDO := linkDAO.GetBlogForId(delFriendVO.Id)
+	if blogDO != nil {
+		// 删除博客
+		if linkDAO.DeleteBlog(*blogDO.Id) {
+			return true, ""
+		} else {
+			return false, "DelLinkFriendError"
+		}
+	} else {
+		return false, "FriendLinkDoesNotExist"
+	}
+}
