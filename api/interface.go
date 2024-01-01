@@ -34,4 +34,5 @@ type IUserV1 interface {
 
 type ISponsorV1 interface {
 	GetSponsor(context.Context, *request.GetSponsorReq) (*request.GetSponsorRes, error)
+	AddSponsor(context.Context, *request.AddSponsorReq) (*request.AddSponsorRes, error)
 }

@@ -2,6 +2,7 @@ package SponsorService
 
 import (
 	"PersonalMain/internal/logic/SponsorServiceImpl"
+	"PersonalMain/internal/model/entity"
 	"github.com/gogf/gf/v2/net/ghttp"
 )
 
@@ -11,4 +12,5 @@ func NewSponsorService() SponsorService {
 
 type SponsorService interface {
 	GetSponsor(*ghttp.Request)
+	AddSponsor(*ghttp.Request, entity.SponsorAddVO)
 }

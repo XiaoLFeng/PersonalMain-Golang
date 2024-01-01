@@ -10,6 +10,7 @@ type UserDO struct {
 	Qq          *string    `json:"qq"`
 	Password    string     `json:"password"`
 	OldPassword *string    `json:"old_password"`
+	Permission  bool       `json:"permission"`
 	EmailVerify bool       `json:"email_verify"`
 	CreatedAt   time.Time  `json:"created_at"`
 	UpdatedAt   *time.Time `json:"updated_at"`
