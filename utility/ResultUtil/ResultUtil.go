@@ -32,6 +32,18 @@ func SuccessNoData(req *ghttp.Request, message string) {
 	})
 }
 
+// SuccessOther
+//
+// 内容输出（不含 data）
+func SuccessOther(req *ghttp.Request, output string, message string) {
+	g.Log().Cat("Result").Debug(context.WithValue(context.Background(), req.RequestURI, req.RequestURI), req.RequestURI, "<", output, "[200]>", message)
+	req.Response.WriteJson(g.Map{
+		"output":  output,
+		"code":    200,
+		"message": message,
+	})
+}
+
 // Error
 //
 // 错误输出（包含 data）

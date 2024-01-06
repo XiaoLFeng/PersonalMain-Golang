@@ -13,4 +13,6 @@ func NewSponsorService() SponsorService {
 type SponsorService interface {
 	GetSponsor(*ghttp.Request)
 	AddSponsor(*ghttp.Request, entity.SponsorAddVO)
+	GetCheckSponsor(*ghttp.Request)
+	CheckSponsor(*ghttp.Request, entity.CheckSponsorVO)
 }

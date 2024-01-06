@@ -17,4 +17,5 @@ type UserService interface {
 	CheckLogin(*ghttp.Request)
 	UserLogout(*ghttp.Request)
 	UserCurrent(*ghttp.Request) *do.UserDO
+	CheckAdministrator(*ghttp.Request) bool
 }

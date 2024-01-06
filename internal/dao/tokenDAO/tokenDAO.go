@@ -79,14 +79,19 @@ func UpdateToken(token string, userId *uint64) (*do.TokenDO, error) {
 	getTokenDO := GetToken(token)
 	if getTokenDO != nil {
 		if getTokenDO.UserId == nil {
-			newTokenDO := do.TokenDO{
-				Id:        nil,
-				UserId:    userId,
-				Token:     (*getTokenDO).Token,
-				ExpiredAt: time.Now().Add(time.Hour * 24),
-				CreatedAt: (*getTokenDO).CreatedAt,
+			// 获取数据库信息
+			result, err := g.Model("xf_token").Where("token = ?", getTokenDO.Token).One()
+			if err != nil {
+				g.Log().Cat("Database").Cat("Token").Error(context.Background(), err.Error())
+				errorData := &CustomError.CustomError{Message: "DatabaseError"}
+				return nil, errorData
 			}
-			_, err := g.Model("xf_token").Data(newTokenDO).Where("token = ?", getTokenDO.Token).Update()
+			// 更新数据库信息
+			var newTokenDO = do.TokenDO{}
+			_ = result.Struct(&newTokenDO)
+			newTokenDO.UserId = userId
+			newTokenDO.ExpiredAt = time.Now().Add(time.Hour * 24)
+			_, err = g.Model("xf_token").Data(newTokenDO).Where("token = ?", getTokenDO.Token).Update()
 			if err != nil {
 				g.Log().Cat("Database").Cat("Token").Error(context.Background(), err.Error())
 				errorData := &CustomError.CustomError{Message: "DatabaseError"}

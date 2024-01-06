@@ -54,8 +54,16 @@ var (
 						})
 						group.Group("/sponsor", func(group *ghttp.RouterGroup) {
 							group.Bind(
-								sponsor.NewSponsorV1(),
+								sponsor.NewSponsorV1().AddSponsor,
+								sponsor.NewSponsorV1().GetSponsor,
 							)
+							group.Group("/check", func(group *ghttp.RouterGroup) {
+								group.Middleware(middleware.VerifyTokenMiddleware)
+								group.Bind(
+									sponsor.NewSponsorV1().CheckSponsor,
+									sponsor.NewSponsorV1().GetCheckSponsor,
+								)
+							})
 						})
 						group.Group("/location", func(group *ghttp.RouterGroup) {
 							//location.NewLinkCustomLocationV1()

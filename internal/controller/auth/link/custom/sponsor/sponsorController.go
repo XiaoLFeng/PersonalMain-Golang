@@ -42,3 +42,27 @@ func (*ControllerV1) AddSponsor(ctx context.Context, _ *request.AddSponsorReq) (
 	}
 	return res, err
 }
+
+// GetCheckSponsor
+//
+// 获取检查赞助
+func (*ControllerV1) GetCheckSponsor(ctx context.Context, _ *request.GetCheckSponsorReq) (res *request.GetCheckSponsorRes, err error) {
+	req := ghttp.RequestFromCtx(ctx)
+	// 获取业务
+	sponorService().GetCheckSponsor(req)
+	return res, err
+}
+
+// CheckSponsor
+//
+// 检查赞助
+func (*ControllerV1) CheckSponsor(ctx context.Context, _ *request.CheckSponsorReq) (res *request.CheckSponsorRes, err error) {
+	req := ghttp.RequestFromCtx(ctx)
+	// 获取业务
+	checkSponsorVO := entity.CheckSponsorVO{}
+	err = req.GetRequestStruct(&checkSponsorVO)
+	if err == nil {
+		sponorService().CheckSponsor(req, checkSponsorVO)
+	}
+	return res, err
+}

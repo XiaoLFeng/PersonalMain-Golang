@@ -124,3 +124,21 @@ func (*DefaultUserImpl) UserCurrent(req *ghttp.Request) *do.UserDO {
 		return nil
 	}
 }
+
+// CheckAdministrator
+//
+// 检查管理员
+func (*DefaultUserImpl) CheckAdministrator(req *ghttp.Request) bool {
+	// 获取token
+	getTokenDO := tokenService().GetToken(req)
+	if getTokenDO != nil {
+		userDO := userDAO.GetUserByToken(getTokenDO.Token)
+		if userDO != nil {
+			return userDO.Permission
+		} else {
+			return false
+		}
+	} else {
+		return false
+	}
+}

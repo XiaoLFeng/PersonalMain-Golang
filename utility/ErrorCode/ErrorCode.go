@@ -21,6 +21,7 @@ var (
 	TokenNotFound               = ErrorCode{output: "TokenNotFound", code: 40102, message: "Token 不存在"}
 	PasswordNotMatch            = ErrorCode{output: "PasswordNotMatch", code: 40103, message: "密码错误"}
 	AlreadyLogin                = ErrorCode{output: "AlreadyLogin", code: 40104, message: "已经登录"}
+	NoPermission                = ErrorCode{output: "NoPermission", code: 40105, message: "没有权限"}
 	RequestBodyMismatching      = ErrorCode{output: "RequestBodyMismatching", code: 40200, message: "请求体不匹配"}
 	RequestBodyError            = ErrorCode{output: "RequestBodyError", code: 40201, message: "请求体错误"}
 	UserExist                   = ErrorCode{output: "UserExists", code: 40300, message: "用户已存在"}
@@ -33,6 +34,8 @@ var (
 	NoSponsor                   = ErrorCode{output: "NoSponsor", code: 40307, message: "没有赞助"}
 	AddSponsorFailed            = ErrorCode{output: "AddSponsorFailed", code: 40308, message: "添加赞助失败"}
 	NoSponsorType               = ErrorCode{output: "NoSponsorType", code: 40309, message: "没有此赞助类型"}
+	SponsorAlreadyCheck         = ErrorCode{output: "SponsorAlreadyCheck", code: 40310, message: "此赞助已经审核过"}
+	NoSponsorInNoCheck          = ErrorCode{output: "NoSponsorInNoCheck", code: 40311, message: "没有未审核的赞助"}
 	ServerUnknownError          = ErrorCode{output: "ServerUnknownError", code: 50000, message: "服务器未知错误"}
 	ServerDatabaseInteriorError = ErrorCode{output: "ServerDatabaseInteriorError", code: 50001, message: "服务器数据库内部错误"}
 )

@@ -86,3 +86,59 @@ func (*SponsorServiceImpl) GetSponsor(req *ghttp.Request) {
 		ResultUtil.ErrorNoData(req, ErrorCode.NoSponsor)
 	}
 }
+
+// GetCheckSponsor
+//
+// 获取检查赞助
+func (*SponsorServiceImpl) GetCheckSponsor(req *ghttp.Request) {
+	// 检查用户是否是管理员
+	if userService().CheckAdministrator(req) {
+		// 获取赞助
+		getSponorDO := sponsorDAO.GetCheckSponsor()
+		if getSponorDO != nil {
+			ResultUtil.Success(req, "Success", getSponorDO)
+		} else {
+			ResultUtil.ErrorNoData(req, ErrorCode.NoSponsorInNoCheck)
+		}
+	} else {
+		ResultUtil.ErrorNoData(req, ErrorCode.NoPermission)
+	}
+}
+
+// CheckSponsor
+//
+// 检查赞助
+func (*SponsorServiceImpl) CheckSponsor(req *ghttp.Request, vo entity.CheckSponsorVO) {
+	// 检查用户是否是管理员
+	if userService().CheckAdministrator(req) {
+		// 获取此单位注册信息
+		getSponsorDO := sponsorDAO.GetSponsorById(vo.Id)
+		if getSponsorDO != nil {
+			// 检查是否已经审核过
+			if getSponsorDO.Check {
+				ResultUtil.ErrorNoData(req, ErrorCode.SponsorAlreadyCheck)
+			} else {
+				// 对内容内容进行审核管理
+				if vo.Check {
+					// 更新数据
+					if sponsorDAO.CheckSponsorSuccess(vo.Id, true) {
+						ResultUtil.SuccessOther(req, "CheckSuccess", "审核通过，内容已处理")
+					} else {
+						ResultUtil.ErrorNoData(req, ErrorCode.ServerDatabaseInteriorError)
+					}
+				} else {
+					// 删除数据
+					if sponsorDAO.DeleteSponsor(vo.Id) {
+						ResultUtil.SuccessOther(req, "CheckDenied", "审核不通过，内容已处理")
+					} else {
+						ResultUtil.ErrorNoData(req, ErrorCode.ServerDatabaseInteriorError)
+					}
+				}
+			}
+		} else {
+			ResultUtil.ErrorNoData(req, ErrorCode.NoSponsor)
+		}
+	} else {
+		ResultUtil.ErrorNoData(req, ErrorCode.NoPermission)
+	}
+}
