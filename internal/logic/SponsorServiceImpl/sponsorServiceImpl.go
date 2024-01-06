@@ -56,13 +56,14 @@ func (*SponsorServiceImpl) AddSponsor(req *ghttp.Request, entity entity.SponsorA
 	}
 	// 数据处理
 	newSponsorDO := do.SponsorDO{
-		Name:      getUserDO.UserName,
-		UserId:    getUserDO.Id,
-		Url:       entity.Url,
-		Type:      entity.Type,
-		Money:     entity.Money,
-		CreatedAt: time.Time{},
-		Check:     check,
+		Name:               getUserDO.UserName,
+		UserId:             getUserDO.Id,
+		Url:                entity.Url,
+		Type:               entity.Type,
+		Money:              entity.Money,
+		StatementOfAccount: entity.StatementOfAccount,
+		CreatedAt:          time.Time{},
+		Check:              check,
 	}
 	if sponsorDAO.AddSponsor(newSponsorDO) {
 		//TODO：发送邮件
