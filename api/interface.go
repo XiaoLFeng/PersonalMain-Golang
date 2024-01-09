@@ -37,4 +37,6 @@ type ISponsorV1 interface {
 	AddSponsor(context.Context, *request.AddSponsorReq) (*request.AddSponsorRes, error)
 	GetCheckSponsor(context.Context, *request.GetCheckSponsorReq) (*request.GetCheckSponsorRes, error)
 	CheckSponsor(context.Context, *request.CheckSponsorReq) (*request.CheckSponsorRes, error)
+	EditSponsor(context.Context, *request.EditSponsorReq) (*request.EditSponsorRes, error)
+	DeleteSponsor(context.Context, *request.DeleteSponsorReq) (*request.DeleteSponsorRes, error)
 }

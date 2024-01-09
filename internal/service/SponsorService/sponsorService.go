@@ -15,4 +15,6 @@ type SponsorService interface {
 	AddSponsor(*ghttp.Request, entity.SponsorAddVO)
 	GetCheckSponsor(*ghttp.Request)
 	CheckSponsor(*ghttp.Request, entity.CheckSponsorVO)
+	EditSponsor(*ghttp.Request, entity.SponsorEditVO)
+	DeleteSponsor(*ghttp.Request, entity.SponsorDelVO)
 }

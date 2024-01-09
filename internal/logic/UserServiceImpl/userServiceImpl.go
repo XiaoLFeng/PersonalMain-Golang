@@ -23,7 +23,7 @@ func tokenService() TokenService.TokenService {
 // UserRegister
 //
 // 用户注册
-func (_ *DefaultUserImpl) UserRegister(req *ghttp.Request, userVO *entity.UserRegisterVO) {
+func (*DefaultUserImpl) UserRegister(req *ghttp.Request, userVO *entity.UserRegisterVO) {
 	// 密码加密
 	enPassword, err := bcrypt.GenerateFromPassword([]byte(userVO.Password), bcrypt.DefaultCost)
 	if err == nil {
@@ -62,7 +62,7 @@ func (_ *DefaultUserImpl) UserRegister(req *ghttp.Request, userVO *entity.UserRe
 // UserLogin
 //
 // 用户登录
-func (_ *DefaultUserImpl) UserLogin(req *ghttp.Request, userVO *entity.UserLoginVO) {
+func (*DefaultUserImpl) UserLogin(req *ghttp.Request, userVO *entity.UserLoginVO) {
 	// 获取数据库中用户信息
 	getUserDO := userDAO.GetUser(userVO.User)
 	if getUserDO != nil {
@@ -141,4 +141,11 @@ func (*DefaultUserImpl) CheckAdministrator(req *ghttp.Request) bool {
 	} else {
 		return false
 	}
+}
+
+// GetUserById
+//
+// 通过id获取用户信息
+func (*DefaultUserImpl) GetUserById(u uint64) *do.UserDO {
+	return userDAO.GetUserById(u)
 }

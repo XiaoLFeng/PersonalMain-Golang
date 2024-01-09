@@ -66,3 +66,31 @@ func (*ControllerV1) CheckSponsor(ctx context.Context, _ *request.CheckSponsorRe
 	}
 	return res, err
 }
+
+// EditSponsor
+//
+// 编辑赞助
+func (*ControllerV1) EditSponsor(ctx context.Context, _ *request.EditSponsorReq) (res *request.EditSponsorRes, err error) {
+	req := ghttp.RequestFromCtx(ctx)
+	// 获取业务
+	editSponsorVO := entity.SponsorEditVO{}
+	err = req.GetRequestStruct(&editSponsorVO)
+	if err == nil {
+		sponorService().EditSponsor(req, editSponsorVO)
+	}
+	return res, err
+}
+
+// DeleteSponsor
+//
+// 删除赞助
+func (*ControllerV1) DeleteSponsor(ctx context.Context, _ *request.DeleteSponsorReq) (res *request.DeleteSponsorRes, err error) {
+	req := ghttp.RequestFromCtx(ctx)
+	// 获取业务
+	deleteSponsorVO := entity.SponsorDelVO{}
+	err = req.GetRequestStruct(&deleteSponsorVO)
+	if err == nil {
+		sponorService().DeleteSponsor(req, deleteSponsorVO)
+	}
+	return res, err
+}

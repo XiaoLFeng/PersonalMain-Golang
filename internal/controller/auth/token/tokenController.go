@@ -32,16 +32,16 @@ func (*ControllerV1) TokenCreate(ctx context.Context, _ *request.TokenCreateReq)
 		token = tokenService.GetToken(req)
 		if tokenService.VerifyToken(token) {
 			// 有效则输出Token依然有效
-			ResultUtil.Success(req, "TokenServiceImpl 依然有效", nil)
+			ResultUtil.Success(req, "Token 依然有效", nil)
 		} else {
 			// 生成新的 Session
 			token = tokenService.CreateToken()
-			ResultUtil.Success(req, "TokenServiceImpl 已重新生成", g.Map{"token": token.Token})
+			ResultUtil.Success(req, "Token 已重新生成", g.Map{"token": token.Token})
 		}
 	} else {
 		// 生成新的 Session
 		token = tokenService.CreateToken()
-		ResultUtil.Success(req, "TokenServiceImpl 已生成", g.Map{"token": token.Token})
+		ResultUtil.Success(req, "Token 已生成", g.Map{"token": token.Token})
 	}
 	return res, err
 }
@@ -59,7 +59,7 @@ func (*ControllerV1) TokenVerify(ctx context.Context, _ *request.TokenVerifyReq)
 		// 检查 Session 是否有效
 		token = tokenService.GetToken(req)
 		if tokenService.VerifyToken(token) {
-			ResultUtil.SuccessNoData(req, "TokenServiceImpl 有效")
+			ResultUtil.SuccessNoData(req, "Token 有效")
 		} else {
 			ResultUtil.ErrorNoData(req, ErrorCode.TokenVerifyFailed)
 		}

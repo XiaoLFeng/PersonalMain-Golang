@@ -14,8 +14,16 @@ type GetCheckSponsorReq struct {
 type CheckSponsorReq struct {
 	g.Meta `path:"/" tags:"检查赞助" method:"patch" summary:"检查赞助"`
 }
+type EditSponsorReq struct {
+	g.Meta `path:"/edit" tags:"编辑赞助" method:"put" summary:"编辑赞助"`
+}
+type DeleteSponsorReq struct {
+	g.Meta `path:"/delete" tags:"删除赞助" method:"delete" summary:"删除赞助"`
+}
 
 type GetSponsorRes struct{}
 type AddSponsorRes struct{}
 type GetCheckSponsorRes struct{}
 type CheckSponsorRes struct{}
+type EditSponsorRes struct{}
+type DeleteSponsorRes struct{}

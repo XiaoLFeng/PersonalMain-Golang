@@ -2,6 +2,7 @@ package sponsorDAO
 
 import (
 	"PersonalMain/internal/model/do"
+	"PersonalMain/internal/model/entity"
 	"context"
 	"github.com/gogf/gf/v2/frame/g"
 )
@@ -131,6 +132,55 @@ func DeleteSponsor(id uint64) bool {
 	_, err := g.Model("xf_sponsor").Where("id", id).Delete()
 	if err == nil {
 		g.Log().Cat("Database").Cat("Sponor").Notice(context.Background(), "xf_sponor 数据表", id, "数据删除成功")
+		return true
+	} else {
+		g.Log().Cat("Database").Cat("Sponor").Error(context.Background(), err.Error())
+		return false
+	}
+}
+
+// EditSponsorNoRegisterUser
+//
+// 编辑赞助
+func EditSponsorNoRegisterUser(entity entity.SponsorEditVO) bool {
+	// 获取相应id数据信息
+	_, err := g.Model("xf_sponsor").Data(
+		g.Map{
+			"name":                 entity.Name,
+			"type":                 entity.Type,
+			"url":                  entity.Url,
+			"money":                entity.Money,
+			"statement_of_account": entity.StatementOfAccount,
+			"created_at":           entity.CreatedAt,
+			"check":                1,
+		}).Where("id", entity.Id).Update()
+	if err == nil {
+		g.Log().Cat("Database").Cat("Sponor").Notice(context.Background(), "xf_sponor 数据表", entity.Id, "数据更新成功")
+		return true
+	} else {
+		g.Log().Cat("Database").Cat("Sponor").Error(context.Background(), err.Error())
+		return false
+	}
+}
+
+// EditSponsorRegisterUser
+//
+// 编辑赞助
+func EditSponsorRegisterUser(entity entity.SponsorEditVO) bool {
+	// 获取相应id数据信息
+	_, err := g.Model("xf_sponsor").Data(
+		g.Map{
+			"name":                 entity.Name,
+			"type":                 entity.Type,
+			"user_id":              entity.UserId,
+			"url":                  entity.UserId,
+			"money":                entity.Money,
+			"statement_of_account": entity.StatementOfAccount,
+			"created_at":           entity.CreatedAt,
+			"check":                0,
+		}).Where("id", entity.Id).Update()
+	if err == nil {
+		g.Log().Cat("Database").Cat("Sponor").Notice(context.Background(), "xf_sponor 数据表", entity.Id, "数据更新成功")
 		return true
 	} else {
 		g.Log().Cat("Database").Cat("Sponor").Error(context.Background(), err.Error())

@@ -89,3 +89,29 @@ func GetUserByToken(token string) *do.UserDO {
 		return nil
 	}
 }
+
+// GetUserById
+//
+// 通过ID获取用户信息
+func GetUserById(u uint64) *do.UserDO {
+	userDO := do.UserDO{}
+	result, err := g.Model("xf_user").Where("id = ?", u).One()
+	if err == nil {
+		if result.IsEmpty() {
+			g.Log().Cat("Database").Cat("User").Notice(context.Background(), "无法获取ID为", u, "用户。原因：不存在此用户")
+			return nil
+		} else {
+			err := result.Struct(&userDO)
+			if err != nil {
+				g.Log().Cat("Database").Cat("User").Error(context.Background(), err.Error())
+				return nil
+			} else {
+				g.Log().Cat("Database").Cat("User").Notice(context.Background(), "获取ID为", u, "用户成功")
+				return &userDO
+			}
+		}
+	} else {
+		g.Log().Cat("Database").Cat("User").Error(context.Background(), err.Error())
+		return nil
+	}
+}

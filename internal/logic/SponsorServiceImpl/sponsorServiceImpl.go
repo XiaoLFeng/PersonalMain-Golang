@@ -108,27 +108,27 @@ func (*SponsorServiceImpl) GetCheckSponsor(req *ghttp.Request) {
 // CheckSponsor
 //
 // 检查赞助
-func (*SponsorServiceImpl) CheckSponsor(req *ghttp.Request, vo entity.CheckSponsorVO) {
+func (*SponsorServiceImpl) CheckSponsor(req *ghttp.Request, entity entity.CheckSponsorVO) {
 	// 检查用户是否是管理员
 	if userService().CheckAdministrator(req) {
 		// 获取此单位注册信息
-		getSponsorDO := sponsorDAO.GetSponsorById(vo.Id)
+		getSponsorDO := sponsorDAO.GetSponsorById(entity.Id)
 		if getSponsorDO != nil {
 			// 检查是否已经审核过
 			if getSponsorDO.Check {
 				ResultUtil.ErrorNoData(req, ErrorCode.SponsorAlreadyCheck)
 			} else {
 				// 对内容内容进行审核管理
-				if vo.Check {
+				if entity.Check {
 					// 更新数据
-					if sponsorDAO.CheckSponsorSuccess(vo.Id, true) {
+					if sponsorDAO.CheckSponsorSuccess(entity.Id, true) {
 						ResultUtil.SuccessOther(req, "CheckSuccess", "审核通过，内容已处理")
 					} else {
 						ResultUtil.ErrorNoData(req, ErrorCode.ServerDatabaseInteriorError)
 					}
 				} else {
 					// 删除数据
-					if sponsorDAO.DeleteSponsor(vo.Id) {
+					if sponsorDAO.DeleteSponsor(entity.Id) {
 						ResultUtil.SuccessOther(req, "CheckDenied", "审核不通过，内容已处理")
 					} else {
 						ResultUtil.ErrorNoData(req, ErrorCode.ServerDatabaseInteriorError)
@@ -137,6 +137,71 @@ func (*SponsorServiceImpl) CheckSponsor(req *ghttp.Request, vo entity.CheckSpons
 			}
 		} else {
 			ResultUtil.ErrorNoData(req, ErrorCode.NoSponsor)
+		}
+	} else {
+		ResultUtil.ErrorNoData(req, ErrorCode.NoPermission)
+	}
+}
+
+// EditSponsor
+//
+// 编辑赞助
+func (*SponsorServiceImpl) EditSponsor(req *ghttp.Request, entity entity.SponsorEditVO) {
+	// 检查用户是否是管理员
+	if userService().CheckAdministrator(req) {
+		// 获取此单位注册信息
+		getSponsorDO := sponsorDAO.GetSponsorById(entity.Id)
+		if getSponsorDO != nil {
+			// 检查类型是否存在
+			if sponsorDAO.GetSponsorType(entity.Type) != nil {
+				// 检查为注册用户或非注册用户
+				if entity.UserId == nil {
+					// 对数据进行上传(NoRegisterUser)
+					if sponsorDAO.EditSponsorNoRegisterUser(entity) {
+						ResultUtil.SuccessNoData(req, "编辑成功")
+					} else {
+						ResultUtil.ErrorNoData(req, ErrorCode.ServerDatabaseInteriorError)
+					}
+				} else {
+					// 检查用户是否存在
+					getUserDO := userService().GetUserById(*entity.UserId)
+					if getUserDO != nil {
+						// 对数据进行上传(RegisterUser)
+						if sponsorDAO.EditSponsorRegisterUser(entity) {
+							ResultUtil.SuccessNoData(req, "编辑成功")
+						} else {
+							ResultUtil.ErrorNoData(req, ErrorCode.ServerDatabaseInteriorError)
+						}
+					} else {
+						ResultUtil.ErrorNoData(req, ErrorCode.UserNotExist)
+					}
+				}
+			} else {
+				ResultUtil.ErrorNoData(req, ErrorCode.NoSponsorType)
+			}
+		} else {
+			ResultUtil.ErrorNoData(req, ErrorCode.NoSponsor)
+		}
+	} else {
+		ResultUtil.ErrorNoData(req, ErrorCode.NoPermission)
+	}
+}
+
+// DeleteSponsor
+//
+// 删除赞助
+func (*SponsorServiceImpl) DeleteSponsor(req *ghttp.Request, entity entity.SponsorDelVO) {
+	// 检查用户是否是管理员
+	if userService().CheckAdministrator(req) {
+		// 获取此单位注册信息
+		getSponsorDO := sponsorDAO.GetSponsorById(entity.Id)
+		if getSponsorDO != nil {
+			// 删除数据
+			if sponsorDAO.DeleteSponsor(entity.Id) {
+				ResultUtil.SuccessNoData(req, "删除成功")
+			} else {
+				ResultUtil.ErrorNoData(req, ErrorCode.ServerDatabaseInteriorError)
+			}
 		}
 	} else {
 		ResultUtil.ErrorNoData(req, ErrorCode.NoPermission)

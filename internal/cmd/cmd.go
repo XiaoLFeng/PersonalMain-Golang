@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"PersonalMain/internal/controller/auth/link/custom/friend"
-	"PersonalMain/internal/controller/auth/link/custom/sponsor"
+	authUser "PersonalMain/internal/controller/auth"
 	"PersonalMain/internal/controller/auth/token"
-	authUser "PersonalMain/internal/controller/auth/user"
+	"PersonalMain/internal/controller/link/custom/friend"
+	"PersonalMain/internal/controller/link/custom/sponsor"
 	"PersonalMain/internal/controller/user"
 	"PersonalMain/internal/middleware"
 	"context"
@@ -56,6 +56,8 @@ var (
 							group.Bind(
 								sponsor.NewSponsorV1().AddSponsor,
 								sponsor.NewSponsorV1().GetSponsor,
+								sponsor.NewSponsorV1().EditSponsor,
+								sponsor.NewSponsorV1().DeleteSponsor,
 							)
 							group.Group("/check", func(group *ghttp.RouterGroup) {
 								group.Middleware(middleware.VerifyTokenMiddleware)
@@ -64,12 +66,6 @@ var (
 									sponsor.NewSponsorV1().GetCheckSponsor,
 								)
 							})
-						})
-						group.Group("/location", func(group *ghttp.RouterGroup) {
-							//location.NewLinkCustomLocationV1()
-						})
-						group.Group("/color", func(group *ghttp.RouterGroup) {
-							//color.NewLinkCustomColorV1()
 						})
 					})
 					// 管理员访问
