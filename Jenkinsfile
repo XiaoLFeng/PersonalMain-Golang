@@ -32,10 +32,33 @@ pipeline {
       stage('项目部署至服务器') {
           steps {
             echo '部署项目至服务器'
-            sshPublisher(publishers: [sshPublisherDesc(configName: 'XiaoLFengBlogServer', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd ./blog-main
-            chmod +x ./personalMain
-            nohup ./personalMain > logger.log 2>&1 &''', execTimeout: 120000, flatten: false, keepFilePermissions: true, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'blog-main', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'personalMain')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-            }
+            sshPublisher(
+                publishers: [
+                    sshPublisherDesc(
+                        configName: 'XiaoLFengBlogServer',
+                        transfers: [
+                            sshTransfer(
+                                cleanRemote: false,
+                                excludes: '',
+                                execCommand: 'echo 1',
+                                execTimeout: 120000,
+                                flatten: false,
+                                makeEmptyDirs: false,
+                                noDefaultExcludes: false,
+                                patternSeparator: '[, ]+',
+                                remoteDirectory: 'blog-main',
+                                remoteDirectorySDF: false,
+                                removePrefix: '',
+                                sourceFiles: 'personalMain'
+                            )
+                        ],
+                        usePromotionTimestamp: false,
+                        useWorkspaceInPromotion: false,
+                        verbose: true
+                    )
+                ]
+            )
+          }
       }
       stage('项目归档') {
            steps {
