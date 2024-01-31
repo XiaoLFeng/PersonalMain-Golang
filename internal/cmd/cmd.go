@@ -83,7 +83,7 @@ var (
 					)
 				})
 			})
-			s.SetServerRoot("resource/public")
+			//s.SetServerRoot("resource/public")
 			s.Run()
 			return nil
 		},
