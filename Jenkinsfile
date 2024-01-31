@@ -11,8 +11,9 @@ pipeline {
             steps {
                 script {
                     docker.image('jetbrains/qodana-go').run('''
-                    --v "${WORKSPACE}":/data/project
-                    --entrypoint=""
+                    -v "${WORKSPACE}":/data/project
+                    -w /data/project
+                    -entrypoint=""
                     ''') {
                         sh '''qodana'''
                     }
