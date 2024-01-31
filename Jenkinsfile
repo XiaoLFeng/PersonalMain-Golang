@@ -3,7 +3,9 @@ pipeline {
       QODANA_TOKEN=credentials('qodana-token')
       SSH_KEY=credentials('ssh-key')
    }
-   agent any
+   agent {
+     label '本地'
+   }
 
    stages {
       stage('Qodana代码检查') {
