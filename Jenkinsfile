@@ -32,7 +32,7 @@ pipeline {
       stage('项目部署至服务器') {
           steps {
             echo '部署项目至服务器'
-            sshPublisher(publishers: [sshPublisherDesc(configName: 'JslServer', sshCredentials: [encryptedPassphrase: '{AQAAABAAAAAQSo3d/A9JT3b4GyF3ko9CLF5tctSczhkSZNxEzdL8mEw=}', key: SSH_KEY, keyPath: '', username: 'ecs-user'], transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd ./blog-main
+            sshPublisher(publishers: [sshPublisherDesc(configName: 'XiaoLFengBlogServer', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd ./blog-main
             chmod +x ./personalMain
             nohup ./personalMain > logger.log 2>&1 &''', execTimeout: 120000, flatten: false, keepFilePermissions: true, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'blog-main', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'personalMain')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
