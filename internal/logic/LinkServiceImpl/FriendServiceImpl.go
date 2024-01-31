@@ -8,7 +8,7 @@ import (
 	"PersonalMain/utility/ErrorCode"
 	"PersonalMain/utility/ResultUtil"
 	"github.com/gogf/gf/v2/net/ghttp"
-	regexp "regexp"
+	"regexp"
 )
 
 // GetLinkFriend
