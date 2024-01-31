@@ -20,7 +20,7 @@ pipeline {
             }
          }
       }
-      stage('项目部署') {
+      stage('项目构建') {
           steps {
             sh 'echo "部署项目"'
             sh 'export GOARCH=amd64'
@@ -31,9 +31,7 @@ pipeline {
       stage('项目部署至服务器') {
           steps {
             sh 'echo "部署项目至服务器"'
-            sshPublisher(publishers: [sshPublisherDesc(configName: 'XiaoLFengBlogServer', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd ./blog-main
-            chmod +x ./personalMain
-            nohup ./personalMain > logger.log 2>&1 &''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'blog-main', remoteDirectorySDF: false, removePrefix: '', sourceFiles: './personalMain')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+            sshPublisher(publishers: [sshPublisherDesc(configName: 'XiaoLFengBlogServer', sshCredentials: [encryptedPassphrase: '{AQAAABAAAAAQSacznOIQ5NOv9Th6Y69rpzOityE/MNxXHF9yZIfcfSo=}', key: '', keyPath: '/var/jenkins_home/general-key', username: 'ecs-user'], transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
           }
       }
    }
