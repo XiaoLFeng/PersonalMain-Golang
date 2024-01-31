@@ -202,6 +202,8 @@ func (*SponsorServiceImpl) DeleteSponsor(req *ghttp.Request, entity entity.Spons
 			} else {
 				ResultUtil.ErrorNoData(req, ErrorCode.ServerDatabaseInteriorError)
 			}
+		} else {
+			ResultUtil.ErrorNoData(req, ErrorCode.NoSponsor)
 		}
 	} else {
 		ResultUtil.ErrorNoData(req, ErrorCode.NoPermission)
