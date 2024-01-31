@@ -25,7 +25,7 @@ pipeline {
             sh 'echo "部署项目"'
             sh 'export GOARCH=amd64'
             sh 'export GOOS=linux'
-            sh 'go build -o personalMain'
+            sh '/usr/local/go/bin/go build -o personalMain'
           }
       }
       stage('项目部署至服务器') {
