@@ -31,7 +31,9 @@ pipeline {
       stage('项目部署至服务器') {
           steps {
             sh 'echo "部署项目至服务器"'
-            // 这里放置部署至服务器的代码
+            sshPublisher(publishers: [sshPublisherDesc(configName: 'XiaoLFengBlogServer', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd ./blog-main
+            chmod +x ./personalMain
+            nohup ./personalMain > logger.log 2>&1 &''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'blog-main', remoteDirectorySDF: false, removePrefix: '', sourceFiles: './personalMain')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
           }
       }
    }
