@@ -2,7 +2,7 @@ pipeline {
    environment {
       QODANA_TOKEN=credentials('qodana-token')
    }
-   agent '本地'
+   agent any
 
    stages {
       stage('Qodana代码检查') {
